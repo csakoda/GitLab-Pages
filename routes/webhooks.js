@@ -9,6 +9,7 @@ var rmdir = require('rimraf');
 var mv = require('mv');
 var exec = require('child_process').exec;
 var urllib = require('url');
+var YAML = require('yamljs');
 
 /* POST  */
 router.post('/pages.json', function(req, res, next) {
@@ -63,7 +64,7 @@ router.post('/pages.json', function(req, res, next) {
                 rmdir(finalRepoPath, function() {
 		    mkdocs_path = path.resolve(repoPath, 'mkdocs.yml');
 		    fs.exists(mkdocs_path, function (exists) {
-			if exists {
+			if (exists) {
 			    mkdocs = YAML.load('mkdocs.yml');
 			    mkdocs['site_dir'] = finalRepoPath;
 			    fs.writeFile(mkdocs_path, mkdocs);
@@ -76,6 +77,7 @@ router.post('/pages.json', function(req, res, next) {
                             // output is in stdout
                             console.log('Done deploying '+projectNamespace+'/'+projectName);
 			});
+		    });
                     // mv(repoPath, finalRepoPath, {
                     //     mkdirp: true,
                     //     clobber: true
