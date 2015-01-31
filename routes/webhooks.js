@@ -65,7 +65,7 @@ router.post('/pages.json', function(req, res, next) {
 		    mkdocs_path = path.resolve(repoPath, 'mkdocs.yml');
 		    fs.exists(mkdocs_path, function (exists) {
 			if (exists) {
-			    mkdocs = YAML.load('mkdocs.yml');
+			    mkdocs = YAML.load(mkdocs_path);
 			    mkdocs['site_dir'] = finalRepoPath;
 			    fs.writeFile(mkdocs_path, mkdocs);
 			    var cmd = "mkdocs build --clean";

@@ -18,6 +18,3 @@ WORKDIR GitLab-Pages
 RUN ssh-keygen -t rsa -f "keys/id_rsa"
 RUN npm install
 RUN bower --allow-root install
-
-
-
