@@ -5,6 +5,7 @@ RUN apt-get update
 RUN apt-get install ruby -y
 RUN apt-get install ruby-all-dev -y
 RUN gem install jekyll
+RUN pip install mkdocs
 RUN npm install -g bower 
 
 ENV GITLAB_URL https://gitlab.imshealth.com
