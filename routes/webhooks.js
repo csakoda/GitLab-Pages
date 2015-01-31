@@ -61,12 +61,21 @@ router.post('/pages.json', function(req, res, next) {
                 var finalRepoPath = path.resolve(config.deploy.publicPagesDir, projectNamespace, projectName);
                 // Delete workingDir
                 rmdir(finalRepoPath, function() {
-                    // jekyll build --safe --source .tmp/Glavin001/gitlab-pages-example/ --destination pages/Glavin001/gitlab-pages-example
-                    var cmd = "jekyll build --safe --source \""+repoPath+"\" --destination \""+finalRepoPath+"\"";
-                    exec(cmd, function (error, stdout, stderr) {
-                        // output is in stdout
-                        console.log('Done deploying '+projectNamespace+'/'+projectName);
-                    });
+		    mkdocs_path = path.resolve(repoPath, 'mkdocs.yml');
+		    fs.exists(mkdocs_path, function (exists) {
+			if exists {
+			    mkdocs = YAML.load('mkdocs.yml');
+			    mkdocs['site_dir'] = finalRepoPath;
+			    fs.writeFile(mkdocs_path, mkdocs);
+			    var cmd = "mkdocs build --clean";
+			} else {
+			    // jekyll build --safe --source .tmp/Glavin001/gitlab-pages-example/ --destination pages/Glavin001/gitlab-pages-example
+			    var cmd = "jekyll build --safe --source \""+repoPath+"\" --destination \""+finalRepoPath+"\"";
+			}
+			exec(cmd, function (error, stdout, stderr) {
+                            // output is in stdout
+                            console.log('Done deploying '+projectNamespace+'/'+projectName);
+			});
                     // mv(repoPath, finalRepoPath, {
                     //     mkdirp: true,
                     //     clobber: true
