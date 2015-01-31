@@ -10,13 +10,12 @@ RUN npm install -g bower
 ENV GITLAB_URL https://gitlab.imshealth.com
 ENV EXT_URL http://localhost
 
-RUN ssh-keygen -t rsa -f "keys/id_rsa"
-
 CMD sh bin/config_and_run.sh
 EXPOSE 3000
 
 ADD . /GitLab-Pages
 WORKDIR GitLab-Pages
+RUN ssh-keygen -t rsa -f "keys/id_rsa"
 RUN npm install
 RUN bower --allow-root install
 
