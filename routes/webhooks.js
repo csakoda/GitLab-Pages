@@ -45,11 +45,9 @@ router.post('/pages.json', function(req, res, next) {
     var projectNamespace = url_path.split('/')[1];
     var projectName = url_path.split('/')[2]; // ends with .git
     projectName = projectName.substring(0, projectName.length - 4);
-    console.log('path: ' + parsed_url['path']);
     var workingDir = config.deploy.tmpPagesDir || config.deploy.publicPagesDir;
     var repoPath = path.resolve(workingDir, projectNamespace, projectName);
-    console.log('repoPath: ' + repoPath);
-    console.log('url: ' + url);
+    console.log('Attempting to clone ' + url + ' to ' + repoPath);
 
     fs.exists(repoPath, function(exists) {
 
