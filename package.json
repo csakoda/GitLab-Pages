@@ -38,6 +38,7 @@
     "nodegit": "^0.2.7",
     "rimraf": "^2.2.8",
     "serve-favicon": "~2.2.0",
-    "serve-index": "^1.6.0"
+    "serve-index": "^1.6.0",
+    "yamljs": "^0.2.1"
   }
 }
