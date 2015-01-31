@@ -8,6 +8,7 @@ var _ = require('lodash');
 var rmdir = require('rimraf');
 var mv = require('mv');
 var exec = require('child_process').exec;
+var urllib = require('url');
 
 /* POST  */
 router.post('/pages.json', function(req, res, next) {
@@ -40,14 +41,15 @@ router.post('/pages.json', function(req, res, next) {
     };
     var repository = payload.repository;
     var url = repository.url;
-    var t = url.split(':')[1].split('/');
-    var projectNamespace = t[0];
-    var projectName = t[1].split('.')[0];
-    // console.log(config);
+    url_path = urllib.parse(url)['path'] // should be like '/Chuck.Sakoda/webhooks-test-repo.git'
+    var projectNamespace = url_path.split('/')[1];
+    var projectName = url_path.split('/')[2]; // ends with .git
+    projectName = projectName.substring(0, projectName.length - 4);
+    console.log('path: ' + parsed_url['path']);
     var workingDir = config.deploy.tmpPagesDir || config.deploy.publicPagesDir;
     var repoPath = path.resolve(workingDir, projectNamespace, projectName);
-    // console.log(repoPath);
-    // console.log(url);
+    console.log('repoPath: ' + repoPath);
+    console.log('url: ' + url);
 
     fs.exists(repoPath, function(exists) {
 
