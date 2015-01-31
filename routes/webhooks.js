@@ -67,8 +67,9 @@ router.post('/pages.json', function(req, res, next) {
 			if (exists) {
 			    mkdocs = YAML.load(mkdocs_path);
 			    mkdocs['site_dir'] = finalRepoPath;
-			    fs.writeFile(mkdocs_path, mkdocs);
+			    fs.writeFile(mkdocs_path, YAML.stringify(mkdocs, 4));
 			    var cmd = "mkdocs build --clean";
+			    console.log('Building site with mkdocs') 
 			} else {
 			    // jekyll build --safe --source .tmp/Glavin001/gitlab-pages-example/ --destination pages/Glavin001/gitlab-pages-example
 			    var cmd = "jekyll build --safe --source \""+repoPath+"\" --destination \""+finalRepoPath+"\"";
