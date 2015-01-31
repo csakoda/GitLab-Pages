@@ -5,6 +5,8 @@ RUN apt-get update
 RUN apt-get install ruby -y
 RUN apt-get install ruby-all-dev -y
 RUN gem install jekyll
+RUN apt-get install python-pip -y
+RUN apt-get install python-dev -y
 RUN pip install mkdocs
 RUN npm install -g bower 
 
