@@ -73,3 +73,19 @@ Login using your GitLab User Token at [http://localhost:1337](http://localhost:1
 - [NodeGit](https://github.com/nodegit/nodegit)
 - [Node-GitLab](https://github.com/moul/node-gitlab)
 - [GitLab-Webhook](https://npmjs.org/package/gitlab-webhook)
+
+## Docker
+
+A docker wrapping https://github.com/csakoda/GitLab-Pages to work with gitlab.imshealth.com
+
+### Building
+
+```
+docker build -t gitlab-pages .
+```
+
+### Running
+
+```
+docker run -d -e EXT_URL=<external pages url> -p 3000:3000 gitlab-pages
+```
