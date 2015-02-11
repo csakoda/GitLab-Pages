@@ -18,4 +18,8 @@ py_replace publicUrl $EXT_URL
 
 sed -i 's/deployBranch: "gl-pages"/deployBranch: "master"/' /GitLab-Pages/_config.js
 
+if [ ! -f keys/id_rsa ]; then 
+    ssh-keygen -t rsa -f "keys/id_rsa"
+fi
+
 npm start

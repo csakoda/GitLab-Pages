@@ -18,6 +18,5 @@ EXPOSE 3000
 
 ADD . /GitLab-Pages
 WORKDIR GitLab-Pages
-RUN ssh-keygen -t rsa -f "keys/id_rsa"
 RUN npm install
 RUN bower --allow-root install
