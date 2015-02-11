@@ -82,6 +82,7 @@ router.post('/pages.json', function(req, res, next) {
                     } else if (fs.existsSync(npm_path)) {
                         var npmConfig = require(npm_path);
                         npmConfig.siteRoot = siteRoot;
+                        npmConfig.vDir = '/pages/'+projectNamespace+'/'+projectName;
                         fs.writeFile(npm_path, JSON.stringify(npmConfig));
                         cmd = "(cd " + repoPath + " && npm install && npm run-script pages)";
                         console.log('Building site with npm run-script pages');
