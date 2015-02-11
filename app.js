@@ -42,13 +42,11 @@ app.use('/projects', projects);
 app.use('/webhooks', webhooks);
 
 // Pages
-app.use('/pages', express.static(config.deploy.publicPagesDir));
-app.use('/pages/:namespace/:project/*', function(req, res, next) {
-    // Serve directory indexes for public/ftp folder (with icons)
-    var p = req.originalUrl.replace(/^\/pages\//, '');
-    var dir = path.join(config.deploy.publicPagesDir, p);
-    var index = serveIndex(dir, {'icons': true})
-    index(req, res, next);
+app.use('/:namespace/:project', function(req, res, next) {
+  var dir =
+    path.join(config.deploy.publicPagesDir, req.params.namespace, req.params.project);
+  var serveStaticContent = express.static(dir);
+  return serveStaticContent(req, res, next);
 });
 
 // catch 404 and forward to error handler
