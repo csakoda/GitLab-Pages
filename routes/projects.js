@@ -18,6 +18,7 @@ router.get('/:project_id/enable', function(req, res, next) {
     });
     fs.readFile(config.deploy.sshPublicKey, function(err, data) {
         if (err) {
+            console.log(err);
             return res.redirect('/');
         }
         var key = data.toString();
@@ -25,15 +26,17 @@ router.get('/:project_id/enable', function(req, res, next) {
             id: projectId,
             title: "GitLab Pages",
             key: key
-        }
+        };
         gitlab.projects.deploy_keys.addKey(projectId, params, function(results) {
             var webhookUrl = config.server.publicUrl+"/webhooks/pages.json";
             gitlab.projects.hooks.list(projectId, function(hooks) {
                 if (_.findIndex(hooks, { 'url': webhookUrl }) === -1) {
+                    console.log('adding hook');
                     gitlab.projects.hooks.add(projectId, webhookUrl, function(results) {
                         res.redirect('/');
                     });
                 } else {
+                    console.log('hook already added');
                     res.redirect('/');
                 }
             });

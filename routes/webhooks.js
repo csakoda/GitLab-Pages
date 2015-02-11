@@ -21,10 +21,12 @@ router.post('/pages.json', function(req, res, next) {
     var afterCommit = payload.after;
     var ref = payload.ref;
 
+    console.log('caught webhook: ======');
+    console.log(payload);
+
     // Check if this is the deploy branch
     var deployRef = "refs/heads/"+config.deploy.deployBranch;
     if (ref !== deployRef) {
-        // console.log(ref, deployRef);
         return res.end();
     }
 
@@ -40,6 +42,7 @@ router.post('/pages.json', function(req, res, next) {
             }
         }
     };
+
     var repository = payload.repository;
     var url = repository.url;
     url_path = urllib.parse(url)['path'] // should be like '/Chuck.Sakoda/webhooks-test-repo.git'
@@ -59,32 +62,38 @@ router.post('/pages.json', function(req, res, next) {
             })
             .done(function() {
                 // Move from workingDir to pages dir
-                var finalRepoPath = path.resolve(config.deploy.publicPagesDir, projectNamespace, projectName);
+                var siteRoot =
+                    path.resolve(config.deploy.publicPagesDir, projectNamespace, projectName);
+
                 // Delete workingDir
-                rmdir(finalRepoPath, function() {
-		    mkdocs_path = path.resolve(repoPath, 'mkdocs.yml');
-		    fs.exists(mkdocs_path, function (exists) {
-			if (exists) {
-			    mkdocs = YAML.load(mkdocs_path);
-			    mkdocs['site_dir'] = finalRepoPath;
-			    fs.writeFile(mkdocs_path, YAML.stringify(mkdocs, 4));
-			    var cmd = "(cd "+repoPath+" && mkdocs build --clean)";
-			    console.log('Building site with mkdocs') 
-			} else {
-			    // jekyll build --safe --source .tmp/Glavin001/gitlab-pages-example/ --destination pages/Glavin001/gitlab-pages-example
-			    var cmd = "jekyll build --safe --source \""+repoPath+"\" --destination \""+finalRepoPath+"\"";
-			}
-			exec(cmd, function (error, stdout, stderr) {
-                            // output is in stdout
-                            console.log('Done deploying '+projectNamespace+'/'+projectName);
-			});
-		    });
-                    // mv(repoPath, finalRepoPath, {
-                    //     mkdirp: true,
-                    //     clobber: true
-                    // }, function(err) {
-                    //     console.log('Done deploying '+projectNamespace+'/'+projectName);
-                    // });
+                rmdir(siteRoot, function() {
+                    mkdocs_path = path.resolve(repoPath, 'mkdocs.yml');
+                    npm_path = path.resolve(repoPath, 'package.json');
+                    var cmd =
+                      "jekyll build --safe --source \"" +
+                      repoPath + "\" --destination \"" +
+                      siteRoot + "\"";
+                    if (fs.existsSync(mkdocs_path)) {
+                        var mkdocs = YAML.load(mkdocs_path);
+                        mkdocs.site_dir = siteRoot;
+                        fs.writeFile(mkdocs_path, YAML.stringify(mkdocs, 4));
+                        cmd = "(cd "+repoPath+" && mkdocs build --clean)";
+                        console.log('Building site with mkdocs');
+                    } else if (fs.existsSync(npm_path)) {
+                        var npmConfig = require(npm_path);
+                        npmConfig.siteRoot = siteRoot;
+                        npmConfig.vDir = '/pages/'+projectNamespace+'/'+projectName;
+                        fs.writeFile(npm_path, JSON.stringify(npmConfig));
+                        cmd = "(cd " + repoPath + " && npm install && npm run-script pages)";
+                        console.log('Building site with npm run-script pages');
+                    } else {
+                        console.log('Building site with jeckyll');
+                    }
+
+                    exec(cmd, function (error, stdout, stderr) {
+                        // output is in stdout
+                        console.log('Done deploying '+projectNamespace+'/'+projectName);
+                    });
                 });
             });
         }
