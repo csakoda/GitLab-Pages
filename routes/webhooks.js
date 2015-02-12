@@ -14,10 +14,8 @@ var YAML = require('yamljs');
 /* POST  */
 router.post('/pages.json', function(req, res, next) {
     var payload = req.body;
-    // console.log(payload);
     var userId = payload.user_id;
     var projectId = payload.project_id;
-    // console.log('pages', userId, projectId);
     var afterCommit = payload.after;
     var ref = payload.ref;
 
@@ -45,7 +43,7 @@ router.post('/pages.json', function(req, res, next) {
 
     var repository = payload.repository;
     var url = repository.url;
-    url_path = urllib.parse(url)['path'] // should be like '/Chuck.Sakoda/webhooks-test-repo.git'
+    url_path = urllib.parse(url).path; // should be like '/Chuck.Sakoda/webhooks-test-repo.git'
     var projectNamespace = url_path.split('/')[1];
     var projectName = url_path.split('/')[2]; // ends with .git
     projectName = projectName.substring(0, projectName.length - 4);
@@ -82,7 +80,7 @@ router.post('/pages.json', function(req, res, next) {
                     } else if (fs.existsSync(npm_path)) {
                         var npmConfig = require(npm_path);
                         npmConfig.siteRoot = siteRoot;
-                        npmConfig.vDir = '/pages/'+projectNamespace+'/'+projectName;
+                        npmConfig.vDir = '/' + projectNamespace + '/' + projectName;
                         fs.writeFile(npm_path, JSON.stringify(npmConfig));
                         cmd = "(cd " + repoPath + " && npm install && npm run-script pages)";
                         console.log('Building site with npm run-script pages');
