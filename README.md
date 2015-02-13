@@ -89,3 +89,20 @@ docker build -t gitlab-pages .
 ```
 docker run -d -e EXT_URL=<external pages url> -p 3000:3000 gitlab-pages
 ```
+
+### Running with crane
+* Install crane
+    * `go get github.com/michaelsauter/crane && go install github.com/michaelsauter/crane`
+
+#### Initial Deploy
+(Optional) Copy your id_rsa and id_rsa.pub keys into keys/
+
+```
+crane lift
+```
+
+#### Deploy Updates
+Only update the pages container, preserving the existing HTML data
+```
+crane lift -r pages
+```
