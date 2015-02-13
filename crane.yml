@@ -1,0 +1,11 @@
+containers:
+  pages:
+    image: gitlab-pages
+    dockerfile: .
+    run:
+      volumes-from: [ "public-html" ]
+      publish: [ "3000:3000" ]
+  public-html:
+    image: busybox
+    run:
+      volume: [ "/GitLab-Pages/pages" ]
