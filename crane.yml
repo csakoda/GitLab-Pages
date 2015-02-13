@@ -5,7 +5,8 @@ containers:
     run:
       volumes-from: [ "public-html" ]
       publish: [ "3000:3000" ]
+      detach: true
   public-html: # data only container
     image: busybox
     run:
-      volume: [ "/GitLab-Pages/pages" ]
+      volume: [ "/GitLab-Pages/pages", "/GitLab-Pages/.tmp" ]
