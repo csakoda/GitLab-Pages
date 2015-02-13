@@ -6,6 +6,7 @@ containers:
       volumes-from: [ "public-html" ]
       publish: [ "3000:3000" ]
       detach: true
+      restart: always
   public-html: # data only container
     image: busybox
     run:
