@@ -7,6 +7,7 @@ containers:
       publish: [ "3000:3000" ]
       detach: true
       restart: always
+      env-file: [ ".env" ]
   public-html: # data only container
     image: busybox
     run:
