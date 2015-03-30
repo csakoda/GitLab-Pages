@@ -98,6 +98,8 @@ docker run -d -e EXT_URL=<external pages url> -p 3000:3000 gitlab-pages
 (Optional) Copy your id_rsa and id_rsa.pub keys into keys/
 
 ```
+cp .env.template .env
+# edit .env to contain your external pages url
 crane lift
 ```
 
