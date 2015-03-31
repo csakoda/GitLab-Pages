@@ -8,10 +8,12 @@ RUN gem install jekyll
 RUN apt-get install python-pip -y
 RUN apt-get install python-dev -y
 RUN pip install mkdocs
-RUN npm install -g bower 
+RUN npm install -g bower
 
+# Environment defaults
 ENV GITLAB_URL https://gitlab.imshealth.com
 ENV EXT_URL http://localhost
+ENV REF_TO_DEPLOY gl-pages
 
 CMD sh bin/config_and_run.sh
 EXPOSE 3000

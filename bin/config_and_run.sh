@@ -15,10 +15,9 @@ cp /GitLab-Pages/default_config.js /GitLab-Pages/_config.js
 
 py_replace url $GITLAB_URL
 py_replace publicUrl $EXT_URL
+py_replace deployBranch $REF_TO_DEPLOY
 
-sed -i 's/deployBranch: "gl-pages"/deployBranch: "master"/' /GitLab-Pages/_config.js
-
-if [ ! -f keys/id_rsa ]; then 
+if [ ! -f keys/id_rsa ]; then
     ssh-keygen -t rsa -f "keys/id_rsa"
 fi
 

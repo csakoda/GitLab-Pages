@@ -19,7 +19,7 @@ module.exports = {
         /**
         Specific branch that will be deployed when pushed
         */
-        deployBranch: "gl-pages",
+        deployBranch: null,
         /**
         Final, public directory of GitLab Pages.
         Jekyll builds will go here, or other static files.
