@@ -78,7 +78,7 @@ router.post('/pages.json', function(req, res, next) {
                         cmd = "(cd "+repoPath+" && mkdocs build --clean)";
                         console.log('Building site with mkdocs');
                     } else if (fs.existsSync(npm_path)) {
-                        var npmConfig = require(npm_path);
+                        var npmConfig = JSON.parse(fs.readFileSync(npm_path, 'utf8'));
                         npmConfig.siteRoot = siteRoot;
                         npmConfig.vDir = '/' + projectNamespace + '/' + projectName;
                         fs.writeFile(npm_path, JSON.stringify(npmConfig));

@@ -20,5 +20,6 @@ pages/*
 _config.js
 keys/*
 !keys/README.md
+.env
 
 **~
